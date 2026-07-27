@@ -8,13 +8,10 @@ const ShowAnecdotes = ({ paragraph }) => {
   );
 };
 
-const Button = ({ onClick, text }) => {
-  return (
-    <>
-      <button onClick={onClick}>{text} </button>
-    </>
-  );
-};
+const Button = ({ onClick, text }) => (
+  <button onClick={onClick}>{text} </button>
+);
+const Header = ({ text }) => <h1>{text}</h1>;
 
 const App = () => {
   const anecdotes = [
@@ -30,21 +27,33 @@ const App = () => {
 
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0));
+  const header = ["Anecdote of the day", "Anecdote with most votes"];
 
-  const random = Math.floor(Math.random() * anecdotes.length);
-  const handleNext = () => setSelected(random);
+  const handleNext = () => {
+    let random;
+    do {
+      random = Math.floor(Math.random() * anecdotes.length);
+    } while (random === selected);
+    setSelected(random);
+  };
+
   const handleVote = () => {
     const copy = [...votes];
     copy[selected] += 1;
     setVotes(copy);
   };
+  const highestVotes = votes.indexOf(Math.max(...votes));
 
   return (
     <div>
+      <Header text={header[0]} />
       <ShowAnecdotes paragraph={anecdotes[selected]} />
       <ShowAnecdotes paragraph={`has ${votes[selected]} votes`} />
       <Button onClick={handleVote} text={"vote"} />
-      <Button onClick={handleNext} text={"next anecdots"} />
+      <Button onClick={handleNext} text={"next anecdote"} />
+      <Header text={header[1]} />
+      <ShowAnecdotes paragraph={anecdotes[highestVotes]} />
+      <ShowAnecdotes paragraph={`has ${votes[highestVotes]} votes`} />
     </div>
   );
 };
