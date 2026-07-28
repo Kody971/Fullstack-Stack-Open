@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Filter from "./components/Filter";
 import Person from "./components/Persons";
+import PersonForm from "./components/PersonForm";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -49,17 +50,13 @@ const App = () => {
       <h2>Phonebook</h2>
       <Filter callback={handleSearchChange} />
       <h3>add a new</h3>
-      <form onSubmit={addPhonebook}>
-        <div>
-          name: <input onChange={handleNameChange} value={newName} />
-        </div>
-        <div>
-          number: <input onChange={handleNumberChange} value={newNumber} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        onSubmit={addPhonebook}
+        handleName={handleNameChange}
+        handleNumber={handleNumberChange}
+        valueName={newName}
+        valueNumber={newNumber}
+      />
       <h3>Numbers</h3>
       <Person data={nameToShow} />
     </div>
