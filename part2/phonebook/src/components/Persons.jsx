@@ -1,3 +1,5 @@
+import ListName from "./ListName";
+
 const Person = ({ data }) => {
   return (
     <>

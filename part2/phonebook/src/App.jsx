@@ -1,14 +1,7 @@
 import { useState } from "react";
 import "./App.css";
 import Filter from "./components/Filter";
-
-const ListName = ({ list }) => {
-  return (
-    <li>
-      {list.name} {list.number}{" "}
-    </li>
-  );
-};
+import Person from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -68,9 +61,7 @@ const App = () => {
         </div>
       </form>
       <h3>Numbers</h3>
-      {nameToShow.map((item) => (
-        <ListName key={item.name} list={item} />
-      ))}
+      <Person data={nameToShow} />
     </div>
   );
 };
