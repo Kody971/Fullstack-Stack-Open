@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import Filter from "./components/Filter";
 
 const ListName = ({ list }) => {
   return (
@@ -47,15 +48,13 @@ const App = () => {
       setNewNumber("");
     } else {
       alert(`${newName} is already added to phonebook`);
-      setNewName("");
-      setNewNumber("");
     }
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
-      filter shown with: <input onChange={handleSearchChange} />
+      <Filter callback={handleSearchChange} />
       <h3>add a new</h3>
       <form onSubmit={addPhonebook}>
         <div>
