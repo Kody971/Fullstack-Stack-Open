@@ -9,4 +9,8 @@ const createData = (newData) => {
   return axios.post(baseUrl, newData).then((response) => response.data);
 };
 
-export default { getAlltData, createData };
+const deleteData = (id) => {
+  return axios.delete(`${baseUrl}/${id}`);
+};
+
+export default { getAlltData, createData, deleteData };

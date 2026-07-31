@@ -1,10 +1,10 @@
 import ListName from "./ListName";
 
-const Person = ({ data }) => {
+const Person = ({ data, callback }) => {
   return (
     <>
       {data.map((item) => (
-        <ListName key={item.name} list={item} />
+        <ListName key={item.id} list={item} callback={callback} />
       ))}
     </>
   );

@@ -11,7 +11,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
-
+  // render data
   useEffect(() => {
     appService.getAlltData().then((data) => {
       setPersons(data);
@@ -28,6 +28,14 @@ const App = () => {
 
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
+  };
+
+  const handleDeleteData = (id, name) => {
+    if (window.confirm(`Delete ${name}`)) {
+      appService
+        .deleteData(id)
+        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+    }
   };
 
   const nameToShow = search
@@ -70,7 +78,7 @@ const App = () => {
         valueNumber={newNumber}
       />
       <h3>Numbers</h3>
-      <Person data={nameToShow} />
+      <Person data={nameToShow} callback={handleDeleteData} />
     </div>
   );
 };
