@@ -1,16 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import Filter from "./components/Filter";
 import Person from "./components/Persons";
 import PersonForm from "./components/PersonForm";
+import Notification from "./components/Notifications";
+import appService from "./services/list";
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: "Arto Hellas", number: "040-123456" },
-  ]);
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    appService.getAlltData().then((data) => {
+      setPersons(data);
+    });
+  }, []);
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -30,16 +36,22 @@ const App = () => {
 
   const addPhonebook = (event) => {
     event.preventDefault();
-    const newNameObject = { name: newName, number: newNumber };
+    const newNameObject = {
+      name: newName,
+      number: newNumber,
+      id: new String(persons.length + 1),
+    };
     const isDuplicate = persons.some(
       (item) =>
         item.name.toLowerCase().replace(/\s+/g, "") ===
         newName.toLowerCase().replace(/\s+/g, ""),
     );
     if (!isDuplicate) {
-      setPersons(persons.concat(newNameObject));
-      setNewName("");
-      setNewNumber("");
+      appService.createData(newNameObject).then((theData) => {
+        setPersons(persons.concat(theData));
+        setNewName("");
+        setNewNumber("");
+      });
     } else {
       alert(`${newName} is already added to phonebook`);
     }

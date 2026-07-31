@@ -1,0 +1,15 @@
+{
+  "list": [
+    {
+      "name": "Arto Hellas",
+      "number": "040-123456",
+      "id": "bUidhf6IITA"
+    },
+    {
+      "name": "rererer",
+      "number": "3434343",
+      "id": "a-qSKRVlti4"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
