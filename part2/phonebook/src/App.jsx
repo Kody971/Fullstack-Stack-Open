@@ -18,18 +18,16 @@ const App = () => {
     });
   }, []);
 
+  // handle data used as callback
   const handleNameChange = (event) => {
     setNewName(event.target.value);
   };
-
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value);
   };
-
   const handleSearchChange = (event) => {
     setSearch(event.target.value);
   };
-
   const handleDeleteData = (id, name) => {
     if (window.confirm(`Delete ${name}`)) {
       appService
@@ -37,41 +35,41 @@ const App = () => {
         .then(() => setPersons(persons.filter((person) => person.id !== id)));
     }
   };
-
-  const nameToShow = search
-    ? persons.filter((person) => person.name.toLowerCase().includes(search))
-    : persons;
-
   const addPhonebook = (event) => {
     event.preventDefault();
-    const newNameObject = {
-      name: newName,
-      number: newNumber,
-      id: new String(persons.length + 1),
-    };
+    // checking same data
     const isDuplicate = persons.some(
       (item) =>
         item.name.toLowerCase().replace(/\s+/g, "") ===
         newName.toLowerCase().replace(/\s+/g, ""),
     );
-    const findSameObject = persons.find(
-      (person) =>
-        person.name.toLowerCase().replace(/\s+/g, "") ===
-        newName.toLowerCase().replace(/\s+/g, ""),
-    );
-    console.log(findSameObject);
+
+    // process new data
     if (!isDuplicate) {
+      const newNameObject = {
+        name: newName,
+        number: newNumber,
+        id: new String(persons.length + 1),
+      };
       appService.createData(newNameObject).then((theData) => {
         setPersons(persons.concat(theData));
         setNewName("");
         setNewNumber("");
       });
-    } else {
+    }
+    // process update data
+    else {
       if (
         window.confirm(
           `${newName} is already added to phonebook, replace the old number with a new one?`,
         )
       ) {
+        // update data when user agree
+        const findSameObject = persons.find(
+          (person) =>
+            person.name.toLowerCase().replace(/\s+/g, "") ===
+            newName.toLowerCase().replace(/\s+/g, ""),
+        );
         const newUpdateObject = {
           name: findSameObject.name,
           number: newNumber,
@@ -89,6 +87,10 @@ const App = () => {
       }
     }
   };
+
+  const nameToShow = search
+    ? persons.filter((person) => person.name.toLowerCase().includes(search))
+    : persons;
 
   return (
     <div>
