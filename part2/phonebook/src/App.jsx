@@ -54,6 +54,12 @@ const App = () => {
         item.name.toLowerCase().replace(/\s+/g, "") ===
         newName.toLowerCase().replace(/\s+/g, ""),
     );
+    const findSameObject = persons.find(
+      (person) =>
+        person.name.toLowerCase().replace(/\s+/g, "") ===
+        newName.toLowerCase().replace(/\s+/g, ""),
+    );
+    console.log(findSameObject);
     if (!isDuplicate) {
       appService.createData(newNameObject).then((theData) => {
         setPersons(persons.concat(theData));
@@ -61,7 +67,26 @@ const App = () => {
         setNewNumber("");
       });
     } else {
-      alert(`${newName} is already added to phonebook`);
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with a new one?`,
+        )
+      ) {
+        const newUpdateObject = {
+          name: findSameObject.name,
+          number: newNumber,
+          id: findSameObject.id,
+        };
+        appService
+          .updateData(findSameObject.id, newUpdateObject)
+          .then((theData) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === newUpdateObject.id ? newUpdateObject : person,
+              ),
+            );
+          });
+      }
     }
   };
 

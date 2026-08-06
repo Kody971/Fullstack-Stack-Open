@@ -13,4 +13,10 @@ const deleteData = (id) => {
   return axios.delete(`${baseUrl}/${id}`);
 };
 
-export default { getAlltData, createData, deleteData };
+const updateData = (id, newData) => {
+  return axios
+    .put(`${baseUrl}/${id}`, newData)
+    .then((response) => response.data);
+};
+
+export default { getAlltData, createData, deleteData, updateData };
