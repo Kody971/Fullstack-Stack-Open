@@ -11,6 +11,9 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [search, setSearch] = useState("");
+  const [notif, setNotif] = useState(null);
+  const [isPass, setIsPass] = useState(true);
+
   // render data
   useEffect(() => {
     appService.getAlltData().then((data) => {
@@ -32,7 +35,23 @@ const App = () => {
     if (window.confirm(`Delete ${name}`)) {
       appService
         .deleteData(id)
-        .then(() => setPersons(persons.filter((person) => person.id !== id)));
+        .then(() => {
+          setPersons(persons.filter((person) => person.id !== id));
+          setNotif(`Deleted ${name}`);
+          setTimeout(() => {
+            setNotif(null);
+          }, 5000);
+        })
+        .catch((err) => {
+          setIsPass(!isPass);
+          setNotif(
+            `Information of ${name} has already been removed from server`,
+          );
+          setTimeout(() => {
+            setNotif(null);
+            setIsPass(!isPass);
+          }, 5000);
+        });
     }
   };
   const addPhonebook = (event) => {
@@ -53,8 +72,12 @@ const App = () => {
       };
       appService.createData(newNameObject).then((theData) => {
         setPersons(persons.concat(theData));
+        setNotif(`Added ${newName}`);
         setNewName("");
         setNewNumber("");
+        setTimeout(() => {
+          setNotif(null);
+        }, 5000);
       });
     }
     // process update data
@@ -70,11 +93,7 @@ const App = () => {
             person.name.toLowerCase().replace(/\s+/g, "") ===
             newName.toLowerCase().replace(/\s+/g, ""),
         );
-        const newUpdateObject = {
-          name: findSameObject.name,
-          number: newNumber,
-          id: findSameObject.id,
-        };
+        const newUpdateObject = { ...findSameObject, number: newNumber };
         appService
           .updateData(findSameObject.id, newUpdateObject)
           .then((theData) => {
@@ -83,6 +102,12 @@ const App = () => {
                 person.id === newUpdateObject.id ? newUpdateObject : person,
               ),
             );
+            setNotif(`Updated ${newName}`);
+            setNewName("");
+            setNewNumber("");
+            setTimeout(() => {
+              setNotif(null);
+            }, 5000);
           });
       }
     }
@@ -95,6 +120,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification condition={isPass} message={notif} />
       <Filter callback={handleSearchChange} />
       <h3>add a new</h3>
       <PersonForm
