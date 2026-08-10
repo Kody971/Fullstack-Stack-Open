@@ -5,6 +5,9 @@ import Person from "./components/Persons";
 import PersonForm from "./components/PersonForm";
 import Notification from "./components/Notifications";
 import appService from "./services/list";
+import Country from "./components/Country";
+import FindCountries from "./components/FindCountries";
+import countriesService from "./services/countries";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -13,11 +16,19 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [notif, setNotif] = useState(null);
   const [isPass, setIsPass] = useState(true);
+  const [countries, setCountries] = useState([]);
+  const [findCountries, setFindCountries] = useState("");
 
   // render data
   useEffect(() => {
     appService.getAlltData().then((data) => {
       setPersons(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    countriesService.getAllData().then((response) => {
+      setCountries(response);
     });
   }, []);
 
@@ -53,6 +64,9 @@ const App = () => {
           }, 5000);
         });
     }
+  };
+  const handleCountriesChange = (event) => {
+    setFindCountries(event.target.value);
   };
   const addPhonebook = (event) => {
     event.preventDefault();
@@ -117,6 +131,19 @@ const App = () => {
     ? persons.filter((person) => person.name.toLowerCase().includes(search))
     : persons;
 
+  const countriesToShow = findCountries
+    ? countries.filter((country) =>
+        country.name.common.toLowerCase().includes(findCountries.toLowerCase()),
+      )
+    : countries;
+
+  console.log(
+    countries.filter((country) =>
+      country.name.common.toLowerCase().includes(findCountries.toLowerCase()),
+    ),
+  );
+  console.log("must to show:", countriesToShow);
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -132,6 +159,10 @@ const App = () => {
       />
       <h3>Numbers</h3>
       <Person data={nameToShow} callback={handleDeleteData} />
+      <br />
+      <br />
+      <FindCountries callback={handleCountriesChange} />
+      <Country data={countriesToShow} />
     </div>
   );
 };
