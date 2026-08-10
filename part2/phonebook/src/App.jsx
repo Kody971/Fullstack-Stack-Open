@@ -162,7 +162,7 @@ const App = () => {
       <br />
       <br />
       <FindCountries callback={handleCountriesChange} />
-      <Country data={countriesToShow} />
+      <Country data={countriesToShow} key={findCountries} />
     </div>
   );
 };
