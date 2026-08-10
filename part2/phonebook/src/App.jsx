@@ -137,13 +137,6 @@ const App = () => {
       )
     : countries;
 
-  console.log(
-    countries.filter((country) =>
-      country.name.common.toLowerCase().includes(findCountries.toLowerCase()),
-    ),
-  );
-  console.log("must to show:", countriesToShow);
-
   return (
     <div>
       <h2>Phonebook</h2>
