@@ -52,6 +52,31 @@ app.delete("/api/persons/:id", (req, res) => {
   res.status(200).end();
 });
 
+app.post("/api/persons", (req, res) => {
+  const data = req.body;
+  const findPerson = persons.find((person) => person.name === data.name);
+  const maxId = Math.max(...persons.map((person) => Number(person.id)));
+
+  if (!data.name || !data.number) {
+    return res.status(403).json({
+      error: "name or number must be filled",
+    });
+  } else if (findPerson) {
+    return res.status(403).json({
+      error: "name already exists in the phonebook",
+    });
+  }
+
+  const newPerson = {
+    id: String(maxId + 1),
+    name: data.name,
+    number: data.number,
+  };
+
+  persons = persons.concat(newPerson);
+  res.json(newPerson);
+});
+
 const PORT = 3001;
 app.listen(PORT);
 console.log("listening on port 3001");
