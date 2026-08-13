@@ -3,7 +3,7 @@ const app = express();
 
 app.use(express.json());
 
-const persons = [
+let persons = [
   {
     id: "1",
     name: "Arto Hellas",
@@ -38,12 +38,18 @@ app.get("/info", (req, res) => {
 
 app.get("/api/persons/:id", (req, res) => {
   const id = req.params.id;
-  const findPerson = persons.find((person) => Number(person.id) === id);
+  const findPerson = persons.find((person) => person.id === id);
   return findPerson
     ? res.json(findPerson)
     : res.status(404).json({
         error: "cant find person information",
       });
+});
+
+app.delete("/api/persons/:id", (req, res) => {
+  const id = req.params.id;
+  persons = persons.filter((person) => person.id !== id);
+  res.status(200).end();
 });
 
 const PORT = 3001;
