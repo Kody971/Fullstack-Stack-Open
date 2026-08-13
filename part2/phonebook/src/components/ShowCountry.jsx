@@ -7,13 +7,11 @@ const ShowCountry = ({ country }) => {
   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
-    console.log("Sending request to:", baseWeatherUrl);
     axios
       .get(`${baseWeatherUrl}`)
       .then((response) => setWeather(response.data));
   }, [country]);
 
-  console.log(weather);
   return weather === null ? (
     <>
       <p>Loading weather data...</p>
