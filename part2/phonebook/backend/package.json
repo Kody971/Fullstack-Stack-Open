@@ -1,0 +1,15 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --watch index.js",
+    "start": "node index.js"
+  },
+  "author": "Ayub Khoirudin",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
