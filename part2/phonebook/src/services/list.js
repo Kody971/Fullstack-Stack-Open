@@ -1,5 +1,5 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/list";
+const baseUrl = "/api/persons";
 
 const getAlltData = () => {
   return axios.get(baseUrl).then((response) => response.data);
