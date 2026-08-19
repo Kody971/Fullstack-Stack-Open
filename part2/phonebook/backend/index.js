@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const cors = require("cors");
 
 morgan.token("body", (req) => {
   return JSON.stringify(req.body);
@@ -11,6 +12,7 @@ app.use(express.static("dist"));
 app.use(
   morgan(":method :url :status :res[content-length] - :response-time ms :body"),
 );
+app.use(cors());
 
 let persons = [
   {
@@ -70,11 +72,12 @@ app.post("/api/persons", (req, res) => {
     return res.status(403).json({
       error: "name or number must be filled",
     });
-  } else if (findPerson) {
-    return res.status(403).json({
-      error: "name already exists in the phonebook",
-    });
   }
+  // else if (findPerson) {
+  //   return res.status(403).json({
+  //     error: "name already exists in the phonebook",
+  //   });
+  // }
 
   const newPerson = {
     id: String(maxId + 1),
@@ -86,6 +89,20 @@ app.post("/api/persons", (req, res) => {
   res.json(newPerson);
 });
 
-const PORT = 3001;
-app.listen(PORT);
-console.log("listening on port 3001");
+app.put("/api/persons/:id", (req, res) => {
+  const id = req.params.id;
+  const data = req.body;
+  const findPerson = persons.find((person) => person.id === id);
+  const updatePerson = { ...findPerson, number: data.number };
+  persons = persons.map((person) =>
+    person.id === req.params.id ? updatePerson : person,
+  );
+  res.json(updatePerson);
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log("listening on port 3001");
+});
+
+module.exports = app;

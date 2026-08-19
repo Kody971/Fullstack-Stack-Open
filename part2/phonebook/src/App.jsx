@@ -74,7 +74,7 @@ const App = () => {
     const isDuplicate = persons.some(
       (item) =>
         item.name.toLowerCase().replace(/\s+/g, "") ===
-        newName.toLowerCase().replace(/\s+/g, ""),
+          newName.toLowerCase().replace(/\s+/g, "") && newNumber.length > 0,
     );
 
     // process new data
@@ -84,15 +84,25 @@ const App = () => {
         number: newNumber,
         id: new String(persons.length + 1),
       };
-      appService.createData(newNameObject).then((theData) => {
-        setPersons(persons.concat(theData));
-        setNotif(`Added ${newName}`);
-        setNewName("");
-        setNewNumber("");
-        setTimeout(() => {
-          setNotif(null);
-        }, 5000);
-      });
+      appService
+        .createData(newNameObject)
+        .then((theData) => {
+          setPersons(persons.concat(theData));
+          setNotif(`Added ${newName}`);
+          setNewName("");
+          setNewNumber("");
+          setTimeout(() => {
+            setNotif(null);
+          }, 5000);
+        })
+        .catch((err) => {
+          const errorNotif =
+            err.response?.data?.error || "Unexpected error occur";
+          setNotif(errorNotif);
+          setTimeout(() => {
+            setNotif(null);
+          }, 5000);
+        });
     }
     // process update data
     else {
