@@ -40,7 +40,6 @@ let persons = [
 ];
 
 app.get("/api/persons", (req, res) => {
-  res.json(persons);
   Contact.find({}).then((data) => res.json(data));
 });
 
@@ -82,14 +81,14 @@ app.post("/api/persons", (req, res) => {
   //   });
   // }
 
-  const newPerson = {
-    id: String(maxId + 1),
+  const newPerson = new Contact({
     name: data.name,
     number: data.number,
-  };
+  });
 
-  persons = persons.concat(newPerson);
-  res.json(newPerson);
+  newPerson.save().then((data) => {
+    res.json(data);
+  });
 });
 
 app.put("/api/persons/:id", (req, res) => {
