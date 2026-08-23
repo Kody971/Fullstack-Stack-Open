@@ -4,10 +4,10 @@ GET http://localhost:3001/api/persons
 GET http://localhost:3001/info
 
 ###
-GET http://localhost:3001/api/persons/4
+GET http://localhost:3001/api/persons/6a8a6634243f4c23a456545c
 
 ###
-DELETE  http://localhost:3001/api/persons/6a8a5deb922d7cd6ad1611f4
+DELETE  http://localhost:3001/api/persons/6a8a649c1cbbdf0fc20de024
 
 ###
 POST http://localhost:3001/api/persons
@@ -16,4 +16,13 @@ Content-Type: application/json
 {
     "name": "domo",
     "number": "044-567890"
+}
+
+### 
+PUT http://localhost:3001/api/persons/6a8a6634243f4c23a456545c
+Content-Type: application/json
+
+{
+    "name": "domo",
+    "number": "098-567890"
 }

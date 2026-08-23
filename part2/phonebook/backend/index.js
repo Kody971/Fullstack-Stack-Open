@@ -50,13 +50,15 @@ app.get("/info", (req, res) => {
 });
 
 app.get("/api/persons/:id", (req, res) => {
-  const id = req.params.id;
-  const findPerson = persons.find((person) => person.id === id);
-  return findPerson
-    ? res.json(findPerson)
-    : res.status(404).json({
-        error: "cant find person information",
-      });
+  Contact.findById(req.params.id)
+    .then((data) => {
+      return data
+        ? res.json(data)
+        : res.status(404).json({
+            error: "cant find person information",
+          });
+    })
+    .catch((err) => next(err));
 });
 
 app.delete("/api/persons/:id", (req, res, next) => {
@@ -93,15 +95,23 @@ app.post("/api/persons", (req, res) => {
   });
 });
 
-app.put("/api/persons/:id", (req, res) => {
-  const id = req.params.id;
-  const data = req.body;
-  const findPerson = persons.find((person) => person.id === id);
-  const updatePerson = { ...findPerson, number: data.number };
-  persons = persons.map((person) =>
-    person.id === req.params.id ? updatePerson : person,
-  );
-  res.json(updatePerson);
+app.put("/api/persons/:id", (req, res, next) => {
+  const { name, number } = req.body;
+
+  Contact.findById(req.params.id)
+    .then((data) => {
+      if (!data) {
+        return res.status(404).end();
+      }
+
+      data.name = name;
+      data.number = number;
+
+      return data.save().then((updatedData) => {
+        res.json(updatedData);
+      });
+    })
+    .catch((err) => next(err));
 });
 
 const errorHandler = (err, req, res, next) => {
