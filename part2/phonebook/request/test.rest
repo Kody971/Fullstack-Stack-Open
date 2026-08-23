@@ -7,13 +7,13 @@ GET http://localhost:3001/info
 GET http://localhost:3001/api/persons/4
 
 ###
-DELETE  http://localhost:3001/api/persons/4
+DELETE  http://localhost:3001/api/persons/6a8a5deb922d7cd6ad1611f4
 
 ###
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
 {
-    "name": "Acumalaka",
-    "number": "080-123456789"
+    "name": "domo",
+    "number": "044-567890"
 }

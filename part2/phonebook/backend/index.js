@@ -59,10 +59,12 @@ app.get("/api/persons/:id", (req, res) => {
       });
 });
 
-app.delete("/api/persons/:id", (req, res) => {
-  const id = req.params.id;
-  persons = persons.filter((person) => person.id !== id);
-  res.status(200).end();
+app.delete("/api/persons/:id", (req, res, next) => {
+  Contact.findByIdAndDelete(req.params.id)
+    .then((data) => {
+      res.status(200).end();
+    })
+    .catch((err) => next(err));
 });
 
 app.post("/api/persons", (req, res) => {
@@ -101,6 +103,16 @@ app.put("/api/persons/:id", (req, res) => {
   );
   res.json(updatePerson);
 });
+
+const errorHandler = (err, req, res, next) => {
+  if (err.name === "CastError") {
+    return res.status(400).send({ error: "malformatted" });
+  }
+
+  next(err);
+};
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
