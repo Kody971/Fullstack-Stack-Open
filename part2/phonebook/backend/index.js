@@ -45,8 +45,10 @@ app.get("/api/persons", (req, res) => {
 
 app.get("/info", (req, res) => {
   const date = new Date().toString();
-  res.send(`<p>Phonebook has info for ${persons.length} people</p>
-        <p>${date}</p>`);
+
+  Contact.countDocuments({}).then((count) =>
+    res.send(`<p>Phonebook has info for ${count} people</p><p>${date}</p>`),
+  );
 });
 
 app.get("/api/persons/:id", (req, res) => {
