@@ -23,6 +23,6 @@ PUT http://localhost:3001/api/persons/6a8a6634243f4c23a456545c
 Content-Type: application/json
 
 {
-    "name": "domo",
+    "name": "dm",
     "number": "098-567890"
 }

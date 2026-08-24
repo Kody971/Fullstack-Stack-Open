@@ -71,10 +71,8 @@ app.delete("/api/persons/:id", (req, res, next) => {
     .catch((err) => next(err));
 });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
   const data = req.body;
-  const findPerson = persons.find((person) => person.name === data.name);
-  const maxId = Math.max(...persons.map((person) => Number(person.id)));
 
   if (!data.name || !data.number) {
     return res.status(403).json({
@@ -92,9 +90,12 @@ app.post("/api/persons", (req, res) => {
     number: data.number,
   });
 
-  newPerson.save().then((data) => {
-    res.json(data);
-  });
+  newPerson
+    .save()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => next(err));
 });
 
 app.put("/api/persons/:id", (req, res, next) => {
@@ -119,6 +120,8 @@ app.put("/api/persons/:id", (req, res, next) => {
 const errorHandler = (err, req, res, next) => {
   if (err.name === "CastError") {
     return res.status(400).send({ error: "malformatted" });
+  } else if (err.name === "ValidationError") {
+    return res.status(400).json({ error: "name atleast 3 char" });
   }
 
   next(err);
