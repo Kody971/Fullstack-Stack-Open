@@ -51,7 +51,7 @@ app.get("/info", (req, res) => {
   );
 });
 
-app.get("/api/persons/:id", (req, res) => {
+app.get("/api/persons/:id", (req, res, next) => {
   Contact.findById(req.params.id)
     .then((data) => {
       return data
