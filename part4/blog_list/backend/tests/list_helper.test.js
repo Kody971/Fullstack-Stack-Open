@@ -1,6 +1,11 @@
 const { test, describe } = require("node:test");
 const assert = require("node:assert");
-const { dummy, totalLikes, favoriteBlog } = require("../utils/list_helper");
+const {
+  dummy,
+  totalLikes,
+  favoriteBlog,
+  mostBlogs,
+} = require("../utils/list_helper");
 
 const listWithOneBlog = [
   {
@@ -96,6 +101,16 @@ describe("favorite blog", () => {
       url: "http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html",
       likes: 12,
       __v: 0,
+    });
+  });
+});
+
+describe("most blogs", () => {
+  test("most blogs by author", () => {
+    const result = mostBlogs(blogs);
+    assert.deepStrictEqual(result, {
+      author: "Robert C. Martin",
+      blogs: 3,
     });
   });
 });
